@@ -57,7 +57,7 @@ LOCAL_CFLAGS += -Werror
 LOCAL_CLANG := true
 LOCAL_SANITIZE := signed-integer-overflow
 
-LOCAL_MODULE := libpvmp3dec
+LOCAL_MODULE := pvmp3dec
 
 LOCAL_ARM_MODE := arm
 

@@ -1,7 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES = \
+LOCAL_SRC_FILES := \
 	Tremolo/bitwise.c \
 	Tremolo/codebook.c \
 	Tremolo/dsp.c \
@@ -42,6 +42,6 @@ LOCAL_EXPORT_C_INCLUDES := \
 
 LOCAL_ARM_MODE := arm
 
-LOCAL_MODULE := libvorbisidec
+LOCAL_MODULE := vorbisidec
 
 include $(BUILD_STATIC_LIBRARY)
