@@ -59,6 +59,29 @@ It depends on successfully passing SMHasher test set.
 
 #pragma once
 
+#if defined(SHP)
+#include <FBaseConfig.h>
+#define EXPORT_DLL  _EXPORT_
+#elif defined(_WIN32)
+#if defined(CC_STATIC)
+#define EXPORT_DLL
+#else
+#if defined(_EXPORT_DLL_)
+#define EXPORT_DLL      __declspec(dllexport)    
+#else         /* use a DLL library */
+#define EXPORT_DLL     __declspec(dllimport)
+#endif
+#endif
+#else
+#if defined(_SHARED_)
+#define EXPORT_DLL     __attribute__((visibility("default")))
+#elif defined(IGNORE_EXPORT)
+#define EXPORT_DLL
+#else
+#define EXPORT_DLL
+#endif
+#endif 
+
 #if defined (__cplusplus)
 extern "C" {
 #endif
@@ -67,7 +90,7 @@ extern "C" {
 //****************************
 // Type
 //****************************
-typedef enum { XXH_OK=0, XXH_ERROR } XXH_errorcode;
+EXPORT_DLL typedef enum { XXH_OK=0, XXH_ERROR } XXH_errorcode;
 
 
 
@@ -75,7 +98,7 @@ typedef enum { XXH_OK=0, XXH_ERROR } XXH_errorcode;
 // Simple Hash Functions
 //****************************
 
-unsigned int XXH32 (const void* input, int len, unsigned int seed);
+EXPORT_DLL unsigned int XXH32 (const void* input, int len, unsigned int seed);
 
 /*
 XXH32() :
@@ -94,9 +117,9 @@ XXH32() :
 // Advanced Hash Functions
 //****************************
 
-void*         XXH32_init   (unsigned int seed);
-XXH_errorcode XXH32_update (void* state, const void* input, int len);
-unsigned int  XXH32_digest (void* state);
+EXPORT_DLL void*         XXH32_init   (unsigned int seed);
+EXPORT_DLL XXH_errorcode XXH32_update (void* state, const void* input, int len);
+EXPORT_DLL unsigned int  XXH32_digest (void* state);
 
 /*
 These functions calculate the xxhash of an input provided in several small packets,
@@ -121,11 +144,11 @@ Memory will be freed by XXH32_digest().
 */
 
 
-int           XXH32_sizeofState(void);
-XXH_errorcode XXH32_resetState(void* state, unsigned int seed);
+EXPORT_DLL int           XXH32_sizeofState(void);
+EXPORT_DLL XXH_errorcode XXH32_resetState(void* state, unsigned int seed);
 
 #define       XXH32_SIZEOFSTATE 48
-typedef struct { long long ll[(XXH32_SIZEOFSTATE+(sizeof(long long)-1))/sizeof(long long)]; } XXH32_stateSpace_t;
+EXPORT_DLL typedef struct { long long ll[(XXH32_SIZEOFSTATE+(sizeof(long long)-1))/sizeof(long long)]; } XXH32_stateSpace_t;
 /*
 These functions allow user application to make its own allocation for state.
 
@@ -138,7 +161,7 @@ use the structure XXH32_stateSpace_t, which will ensure that memory space is lar
 */
 
 
-unsigned int XXH32_intermediateDigest (void* state);
+EXPORT_DLL unsigned int XXH32_intermediateDigest (void* state);
 /*
 This function does the same as XXH32_digest(), generating a 32-bit hash,
 but preserve memory context.
