@@ -1,4 +1,4 @@
-/* Copyright (c) 2013 Scott Lembcke and Howling Moon Software
+/* Copyright (c) 2007 Scott Lembcke
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,30 @@
 /// @defgroup cpPivotJoint cpPivotJoint
 /// @{
 
-/// Check if a constraint is a slide joint.
-CP_EXPORT cpBool cpConstraintIsPivotJoint(const cpConstraint *constraint);
+const cpConstraintClass *cpPivotJointGetClass(void);
+
+/// @private
+typedef struct cpPivotJoint {
+	cpConstraint constraint;
+	cpVect anchr1, anchr2;
+	
+	cpVect r1, r2;
+	cpMat2x2 k;
+	
+	cpVect jAcc;
+	cpVect bias;
+} cpPivotJoint;
 
 /// Allocate a pivot joint
-CP_EXPORT cpPivotJoint* cpPivotJointAlloc(void);
+cpPivotJoint* cpPivotJointAlloc(void);
 /// Initialize a pivot joint.
-CP_EXPORT cpPivotJoint* cpPivotJointInit(cpPivotJoint *joint, cpBody *a, cpBody *b, cpVect anchorA, cpVect anchorB);
+cpPivotJoint* cpPivotJointInit(cpPivotJoint *joint, cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2);
 /// Allocate and initialize a pivot joint.
-CP_EXPORT cpConstraint* cpPivotJointNew(cpBody *a, cpBody *b, cpVect pivot);
+cpConstraint* cpPivotJointNew(cpBody *a, cpBody *b, cpVect pivot);
 /// Allocate and initialize a pivot joint with specific anchors.
-CP_EXPORT cpConstraint* cpPivotJointNew2(cpBody *a, cpBody *b, cpVect anchorA, cpVect anchorB);
+cpConstraint* cpPivotJointNew2(cpBody *a, cpBody *b, cpVect anchr1, cpVect anchr2);
 
-/// Get the location of the first anchor relative to the first body.
-CP_EXPORT cpVect cpPivotJointGetAnchorA(const cpConstraint *constraint);
-/// Set the location of the first anchor relative to the first body.
-CP_EXPORT void cpPivotJointSetAnchorA(cpConstraint *constraint, cpVect anchorA);
-
-/// Get the location of the second anchor relative to the second body.
-CP_EXPORT cpVect cpPivotJointGetAnchorB(const cpConstraint *constraint);
-/// Set the location of the second anchor relative to the second body.
-CP_EXPORT void cpPivotJointSetAnchorB(cpConstraint *constraint, cpVect anchorB);
+CP_DefineConstraintProperty(cpPivotJoint, cpVect, anchr1, Anchr1)
+CP_DefineConstraintProperty(cpPivotJoint, cpVect, anchr2, Anchr2)
 
 /// @}
